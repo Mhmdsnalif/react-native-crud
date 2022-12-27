@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import firebase from 'firebase';
+import { View, Text, StyleSheet } from 'react-native';
 import 'firebase/firestore';
+import firebase from '../database/firebase';
 
-function liatPeta() {
+function ListPeta() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -27,12 +27,28 @@ function liatPeta() {
   }, []);
 
   return (
-    <View>
+    <View style = {styles.container}>
       {locations.map((location) => (
-        <Text key={location.id}>{location.time}</Text>
-      ))}
+          <View style={styles.item} key={location.id}>
+            <Text>ID: {location.id}</Text>
+            <Text>Latitude: {location.latitude}</Text>
+            <Text>Longitude: {location.longitude}</Text>
+            <Text>Current Time: {location.time}</Text>
+          </View>
+        ))}
     </View>
   );
 }
 
-export default liatPeta;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  item: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: '#f9f9f9',
+  },
+})
+
+export default ListPeta;

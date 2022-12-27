@@ -12,6 +12,12 @@ Dashboard = ({navigation}) =>{
                 onPress={() => navigation.navigate('Peta')}
             />
             </View>
+            <View style={styles.tombol}>
+            <Button 
+                title="Liat Peta" 
+                onPress={() => navigation.navigate('List Peta')}
+            />
+            </View>
             
         </View>
     )
@@ -25,7 +31,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         padding: 35,
         backgroundColor: '#fff'
-    },    
+    }, 
+    
+    tombol: {
+        paddingBottom: 15,
+    }
     
 })
 export default Dashboard;

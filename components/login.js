@@ -11,22 +11,32 @@ Login = ({navigation}) =>{
     const [error, setError] = useState('');
 
     const handleLogin = () =>{
-        const db = firebase.firestore();
-        db.collection('register')
-            .where('email', '==', email)
-            .where('password', '==', password)
-            .get()
-            .then((snapshot) => {
-                if(snapshot.empty){
-                    Alert.alert('Isi dengan Benar');
-                    return;
-                }else{
-                    navigation.navigate('Dashboard');
-                }
-            })
-            .catch((error) => {
-                setError(error.message);
-            });
+
+            if (email === '') {
+                Alert.alert('Error', 'Email Kosong');
+              } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                Alert.alert('Error', 'Masukkan Email yang Valid');
+              } else {
+                firebase
+                  .firestore()
+                  .collection('register')
+                  .where('email', '==', email)
+                  .where('password', '==', password)
+                  .get()
+                  .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        Alert.alert('Error', 'Email or password Salah');
+                    } else {
+                        setEmail('');
+                        setPassword('');
+                        navigation.navigate('Dashboard');
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }
+        
     };
 
     return(

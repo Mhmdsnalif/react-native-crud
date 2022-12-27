@@ -5,6 +5,7 @@ import Login from './components/login';
 import Signup from './components/signup';
 import Dashboard from './components/dashboard';
 import Peta from './components/peta';
+import ListPeta from './components/listPeta';
 
 const Stack = createStackNavigator();
 function MyStack() {
@@ -47,6 +48,14 @@ function MyStack() {
        component={Peta} 
        options={
          { title: 'Peta' },
+         {headerLeft: null} 
+       }
+     />
+      <Stack.Screen 
+       name="List Peta" 
+       component={ListPeta} 
+       options={
+         { title: 'List Peta' },
          {headerLeft: null} 
        }
      />

@@ -11,37 +11,46 @@ signUp = ({navigation}) =>{
     const [error, setError] = useState('');
 
     const handleRegister = () => {
-        //cek email pada database
-        const db = firebase.firestore();
-        db.collection('register')
-            .where('email', '==', email)
-            .get()
-            .then((snapshot) => {
-                if (!snapshot.empty){
-                    Alert.alert('Masukkan Email Yang Terdaftar');
-                    return;
-                }
-
-                //jika email belum terdaftar, add data
-                db.collection('register')
+        if (email === '') {
+            Alert.alert('Error', 'Email kosong');
+          } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            Alert.alert('Error', 'Masukan Email yang Valid');
+          } else {
+            firebase
+              .firestore()
+              .collection('register')
+              .where('email', '==', email)
+              .get()
+              .then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                  Alert.alert('Error', 'Email Sudah Terdaftar');
+                    setName('');
+                    setEmail('');
+                    setPassword('');
+                } else {
+                  firebase
+                    .firestore()
+                    .collection('register')
                     .add({
-                        name,
-                        email,
-                        password,
+                      name,
+                      email,
+                      password,
                     })
                     .then(() => {
-                        //jika login berhasil maka masuk halaman login
-                        navigation.navigate('Login')
+                        setName('');
+                        setEmail('');
+                        setPassword('');
+                        navigation.navigate('Login');
                     })
-                    //jika gagal add data akan muncul error
                     .catch((error) => {
-                        setError(error.message);
-                    })
-            })
-            .catch((error) => {
-                //jika mengambil data gagal, akan tampil error
-                setError(error.message);
-            })
+                      console.log(error);
+                    });
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
     };
 
     return(
