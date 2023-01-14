@@ -7,8 +7,7 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import Constants from "expo-constants";
 import { format } from 'date-fns';
-
-
+import 'react-native-safe-area-context'
  
 Peta = () =>{
     const [location, setLocation] = useState(null);

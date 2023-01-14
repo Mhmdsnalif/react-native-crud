@@ -1,14 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import 'firebase/firestore';
 import firebase from '../database/firebase';
-import { View, StyleSheet, Button, Text, Alert } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { doc } from "firebase/firestore";
+import { StyleSheet, Text, Alert } from "react-native";
+import { VStack, NativeBaseProvider, Input, Stack, Icon, Pressable, Button } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 
 Login = ({navigation}) =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [show, setShow] = React.useState(false);
 
     const handleLogin = () =>{
 
@@ -40,32 +41,63 @@ Login = ({navigation}) =>{
     };
 
     return(
-        <View style={styles.container}>
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                style={styles.inputStyle}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
-            <Button
-                color="#3740FE"
-                title="Sigin"
+          <NativeBaseProvider> 
+            <VStack style={styles.container}>
+              <Stack style={styles.contText}>
+                <Text style={{
+                  color: "#00C9B1",
+                  fontWeight: 'bold',
+                  fontSize: 44,
+                  }}>
+                  Welcome 
+                </Text>
+                <Text style={{
+                  color: "#00C9B1",
+                  fontWeight: 'bold',
+                  fontSize: 44,
+                  }}>
+                  To <Text style={{color: "#000000", fontWeight: 'bold',}}> MSTourism </Text>
+                </Text>
+              </Stack>
+
+            <Stack space={4} w="100%" style={styles.inputStyle}>
+              <Input w="100%"
+              InputLeftElement=
+              {<Icon as={<MaterialIcons name="person" />} 
+              size={5} ml="2" color="#00C9B1" />}
+              fontSize = {24}
+              paddingLeft = {5}
+              placeholder="Name" 
+              variant= "underlined"
+              onChangeText={setEmail} />
+
+              <Input w="100%" 
+              type={show ? "text" : "password"} 
+              InputLeftElement=
+              {<Icon as={<MaterialIcons name="https" />} 
+              size={5} ml="2" color="#00C9B1" />}
+              InputRightElement={<Pressable onPress={() => setShow(!show)}>
+                    <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
+                  </Pressable>} 
+                  placeholder="Password" 
+                  variant= "underlined"
+                  fontSize = {24}
+                  paddingLeft = {5} 
+                  onChangeText={setPassword}/>
+                <Button
                 onPress={handleLogin}
-            />
-            {error ? <Text>{error}</Text> : null}
-            <Text 
-                style={styles.loginText}
-                onPress={() => navigation.navigate('Signup')}>
-                Belum Memiliki Akun? Click here to register
+                bgColor="#00C9B1"
+                shadow={3}
+                marginTop={100}
+            >Login</Button>
+            <Text style={styles.loginText}>
+                Belum Memiliki Akun? <Text onPress={() => navigation.navigate('Signup')} style={{color: '#3740FE'}}>Click here</Text>
             </Text>
-        </View>
+            </Stack>
+            </VStack>
+
+          </NativeBaseProvider>
+            
     )
 }
 
@@ -78,18 +110,20 @@ const styles = StyleSheet.create({
         padding: 35,
         backgroundColor: '#fff'
       },
+      contText: {
+        flex: 1,
+        marginTop: 140,
+      },
       inputStyle: {
-        width: '100%',
-        marginBottom: 15,
-        paddingBottom: 15,
-        alignSelf: "center",
-        borderColor: "#ccc",
-        borderBottomWidth: 1
+        flex: 2,
+        marginTop: 150,
+        marginBottom: 100,
       },
       loginText: {
-        color: '#3740FE',
+        color: '#000',
         marginTop: 25,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 16,
       }
 })
 

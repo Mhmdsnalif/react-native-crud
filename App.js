@@ -1,72 +1,56 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createAppContainer, createSwitchNavigator} from "react-navigation";
 import Login from './components/login';
 import Signup from './components/signup';
 import Dashboard from './components/dashboard';
 import Peta from './components/peta';
 import ListPeta from './components/listPeta';
+import Front from './components/splash';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 function MyStack() {
   return (
+    <NavigationContainer>
     <Stack.Navigator
-      initialRouteName="Signup"
       screenOptions={{
-        headerTitleAlign: 'center',
-        headerStyle: {
-          backgroundColor: '#3740FE',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}>
+        headerShown: false
+      }}
+      >
       <Stack.Screen 
         name="Signup" 
         component={Signup} 
-        options={{ title: 'Signup' }}
       />       
       <Stack.Screen 
         name="Login" 
         component={Login} 
-        options={
-          {title: 'Login'},
-          {headerLeft: null} 
-        }
       />
       <Stack.Screen 
        name="Dashboard" 
        component={Dashboard} 
-       options={
-         { title: 'Dashboard' },
-         {headerLeft: null} 
-       }
      />
       <Stack.Screen 
        name="Peta" 
-       component={Peta} 
-       options={
-         { title: 'Peta' },
-         {headerLeft: null} 
-       }
+       component={Peta}  
      />
       <Stack.Screen 
        name="List Peta" 
        component={ListPeta} 
-       options={
-         { title: 'List Peta' },
-         {headerLeft: null} 
-       }
      />
     </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <MyStack />
-    </NavigationContainer>
-  );
-};
+const RootNavigator = createSwitchNavigator(
+  {
+    Stack: MyStack,
+    Splash: Front,
+  },
+  {
+    initialRouteName: "Splash",
+  }
+);
+
+export default createAppContainer(RootNavigator);
