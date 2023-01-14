@@ -1,4 +1,8 @@
-# react-native-crud
-Login dan Register menggunakan firestore database
+# tubes-ppb-sem5
 
-Menampilkan Maps dan simpan ke firestore database
+Kelompok 5 
+Anggota:
+1. Muhammad Sufi Nur Alif
+2. Mahendra Rangga A
+
+Aplikasi Tourism
