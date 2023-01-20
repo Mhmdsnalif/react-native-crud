@@ -13,6 +13,7 @@ import Front from './components/splash';
 import Details from './components/details';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomTab from './components/bottomTab'
+import DetailPesan from './components/detailPesan';
 //import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createStackNavigator();
@@ -48,6 +49,10 @@ function MyStack() {
       <Stack.Screen 
        name="Details" 
        component={Details} 
+     />
+      <Stack.Screen 
+       name="DetailPesan" 
+       component={DetailPesan} 
      />
     </Stack.Navigator>
     </NavigationContainer>

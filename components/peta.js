@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, StyleSheet, Text, Button, Alert } from 'react-native';
+import { View, StyleSheet, Text, Button, Alert, SafeAreaView, StatusBar } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import 'firebase/firestore';
 import firebase from '../database/firebase';
@@ -7,7 +7,9 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import Constants from "expo-constants";
 import { format } from 'date-fns';
-import 'react-native-safe-area-context'
+import COLORS from "./color";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
  
 Peta = () =>{
     const [location, setLocation] = useState(null);
@@ -67,6 +69,19 @@ Peta = () =>{
     };
 
     return(
+      <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(0,0,0,0)" }}>
+      <StatusBar translucent backgroundColor="rgba(0,0,0,0)" />
+      <View style={styles.header}>
+          <AntDesign
+            name="left"
+            size={28}
+            color={COLORS.white}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <MaterialIcons name="more-vert" size={28} color={COLORS.white} />
+        </View>
         <View style={styles.container}>
             <MapView
                 style={{ flex: 1 }}
@@ -92,6 +107,7 @@ Peta = () =>{
             
             {error ? <Text>{error}</Text> : null}
         </View>
+        </SafeAreaView>
     )
 }
 
@@ -109,7 +125,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       paddingTop: Constants.statusBarHeight,
-    }
+    },
+    header: {
+      paddingVertical: 20,
+      paddingHorizontal: 20,
+      marginTop: 20,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      backgroundColor: "rgba(0,0,0,0)"
+      //backgroundColor: COLORS.primary,
+    },
   });
 
 export default Peta;

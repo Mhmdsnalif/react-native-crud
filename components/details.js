@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,18 +11,23 @@ import {
 import COLORS from "./color";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import Pesan from "./pesanTiket";
 
 // import COLORS from '../consts/colors'
 
 function Details({ navigation, route }) {
   const place = route.params;
-  console.log(place);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar translucent backgroundColor="rgba(0,0,0,0)" />
       <ImageBackground style={{ flex: 0.7 }} source={place.image}>
-        {console.log(place.image)}
+        
         <View style={style.header}>
           <AntDesign
             name="left"
@@ -46,27 +51,18 @@ function Details({ navigation, route }) {
           >
             {place.name}
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <AntDesign name="star" size={30} color={COLORS.orange} />
-            <Text
-              style={{ color: COLORS.white, fontSize: 20, paddingLeft: 10 }}
-            >
-              5.0
-            </Text>
-          </View>
+          
         </View>
       </ImageBackground>
 
       <View style={style.detailsContainer}>
+        <TouchableOpacity activeOpacity={0.8}
+          onPress={() => navigation.navigate('Peta')}
+        >
         <View style={style.iconContainer}>
-          <AntDesign name="heart" size={28} color={COLORS.red} />
+          <FontAwesome5 name="map-marker-alt" size={28} color={COLORS.red} />
         </View>
+        </TouchableOpacity>
         <View style={{ flexDirection: "row", marginTop: 10 }}>
           <MaterialIcons name="location-on" size={28} color={COLORS.primary} />
           <Text
@@ -85,13 +81,20 @@ function Details({ navigation, route }) {
           <Text
             style={{ fontSize: 18, fontWeight: "bold", color: COLORS.white }}
           >
-            $200
+            {place.harga}
           </Text>
           <Text style={{ fontSize: 12, color: COLORS.grey, marginLeft: 5 }}>
             PER DAY
           </Text>
         </View>
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8}
+        onPress={toggleModal}
+        >
+          <Pesan
+              isVisible={isModalVisible}
+          
+              onClose={toggleModal}
+          />
           <View style={style.bookNow}>
             <Text style={{ fontWeight: "bold", color: COLORS.primary, fontSize:16 }}>
               Book Now

@@ -4,6 +4,7 @@ import Dashboard from './dashboard';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import Peta from './peta';
+import DetailPesan from './detailPesan';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +20,7 @@ function MyTabs() {
         tabBarShowLabel: false,
         headerShown: null,
       }} />
-      <Tab.Screen name="Ticket" component={Peta} options={{
+      <Tab.Screen name="Ticket" component={DetailPesan} options={{
         tabBarIcon: ({ focused, color, size }) => (
           <FontAwesome name="ticket" size={34} color="#00C9B1" />
         ),

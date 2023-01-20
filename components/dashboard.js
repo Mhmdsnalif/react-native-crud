@@ -83,16 +83,7 @@ const Dashboard = ({ navigation }) => {
                 {place.location}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <AntDesign name="staro" size={20} color={COLORS.white} />
-              <Text style={{ color: COLORS.white, marginLeft: 5 }}>5.0</Text>
-            </View>
+            
           </View>
         </ImageBackground>
       </TouchableOpacity>
@@ -101,6 +92,12 @@ const Dashboard = ({ navigation }) => {
 
   const RecomCard = ({ place }) => {
     return (
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          navigation.navigate("Details",  place );
+        }}
+      >
       <ImageBackground style={style.rmCardImage} source={place.image}>
         <Text
           style={{
@@ -119,10 +116,10 @@ const Dashboard = ({ navigation }) => {
             alignItems: "flex-end",
           }}
         >
-          <View style={{ flexDirection: "row", width: "100%", marginTop: 10 }}>
+          <View style={{ flexDirection: "column", width: "100%", marginTop: 10 }}>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -132,29 +129,21 @@ const Dashboard = ({ navigation }) => {
                 {place.location}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginLeft: 15,
-              }}
-            >
-              <AntDesign name="staro" size={22} color={COLORS.white} />
-              <Text style={{ color: COLORS.white, marginLeft: 7 }}>5.0</Text>
-            </View>
+            
           </View>
           <Text style={{ color: COLORS.white, fontSize: 13 }}>
             {place.details}
           </Text>
         </View>
       </ImageBackground>
+      </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar translucent backgroundColor={COLORS.primary} />
+      
       <View style={style.header}>
         <MaterialIcons name="sort" size={28} color={COLORS.white} />
         <Ionicons name="notifications-outline" size={28} color={COLORS.white} />
@@ -192,7 +181,7 @@ const Dashboard = ({ navigation }) => {
         <Text style={style.sectionTitle}>Places</Text>
         <View>
           <FlatList
-            contentContainerStyle={{ paddingLeft: 20, paddingBottom: 20, marginBottom: 20 }}
+            contentContainerStyle={{ paddingLeft: 20, paddingBottom: 10 }}
             horizontal
             showsHorizontalScrollIndicator={false}
             data={places}
@@ -201,7 +190,7 @@ const Dashboard = ({ navigation }) => {
           <Text style={style.sectionTitle}>Recommended</Text>
           <FlatList
             snapToInterval={width - 20}
-            contentContainerStyle={{ paddingLeft: 20, paddingBottom: 20 }}
+            contentContainerStyle={{ paddingLeft: 20, paddingBottom: 10 }}
             
             showsHorizontalScrollIndicator={false}
             data={places}
@@ -216,6 +205,7 @@ const style = StyleSheet.create({
   header: {
     paddingVertical: 20,
     paddingHorizontal: 20,
+    marginTop: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: COLORS.primary,
@@ -268,6 +258,8 @@ const style = StyleSheet.create({
     overflow: "hidden",
     marginRight: 20,
     padding: 10,
+    marginBottom: 10,
+    marginTop: 10,
     borderRadius: 10,
   },
 });
