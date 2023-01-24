@@ -11,7 +11,8 @@ import COLORS from "./color";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
  
-Peta = () =>{
+Peta = ({navigation, route}) =>{
+  const place = route.params;
     const [location, setLocation] = useState(null);
     const [error, setError] = useState('');
     const [markerCoordinates, setMarkerCoordinates] = useState({

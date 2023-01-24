@@ -14,7 +14,10 @@ import Details from './components/details';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomTab from './components/bottomTab'
 import DetailPesan from './components/detailPesan';
+import MapScreen from './components/detailMaps';
+import Profile from './components/profile';
 //import { Ionicons } from '@expo/vector-icons';
+
 
 const Stack = createStackNavigator();
 
@@ -53,6 +56,14 @@ function MyStack() {
       <Stack.Screen 
        name="DetailPesan" 
        component={DetailPesan} 
+     />
+      <Stack.Screen 
+       name="MapScreen" 
+       component={MapScreen} 
+     />
+     <Stack.Screen 
+       name="Profile" 
+       component={Profile} 
      />
     </Stack.Navigator>
     </NavigationContainer>

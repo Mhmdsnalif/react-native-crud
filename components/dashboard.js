@@ -21,6 +21,9 @@ import places from "./places";
 const { width } = Dimensions.get("screen");
 
 const Dashboard = ({ navigation }) => {
+  
+  //fungsi search
+
   // catergories
   const categoryIcons = [
     <MaterialIcons name="flight" size={25} color={COLORS.primary} />,
@@ -131,7 +134,7 @@ const Dashboard = ({ navigation }) => {
             </View>
             
           </View>
-          <Text style={{ color: COLORS.white, fontSize: 13 }}>
+          <Text style={{ color: COLORS.white, fontSize: 15 }}>
             {place.details}
           </Text>
         </View>
@@ -145,8 +148,7 @@ const Dashboard = ({ navigation }) => {
       <StatusBar translucent backgroundColor={COLORS.primary} />
       
       <View style={style.header}>
-        <MaterialIcons name="sort" size={28} color={COLORS.white} />
-        <Ionicons name="notifications-outline" size={28} color={COLORS.white} />
+        
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -214,7 +216,6 @@ const style = StyleSheet.create({
     height: 60,
     width: "100%",
     backgroundColor: COLORS.white,
-    // backgroundColor: COLORS.red,
     borderRadius: 10,
     position: "absolute",
     top: 90,
@@ -261,6 +262,8 @@ const style = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
     borderRadius: 10,
+    opacity: 0.7,
+    backgroundColor: 'black',
   },
 });
 export default Dashboard;

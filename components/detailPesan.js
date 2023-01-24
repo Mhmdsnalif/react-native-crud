@@ -17,7 +17,7 @@ import React, { useState, useEffect } from 'react';
 import 'firebase/firestore';
 import firebase from '../database/firebase';
 import COLORS from "./color";
-import { deleteDoc, doc } from "firebase/firestore";
+
 
 function DetailPesan ({navigation, route}){
     const place = route.params;
@@ -42,29 +42,19 @@ function DetailPesan ({navigation, route}){
         return () => unsubscribe();
       }, []);
 
-      const handleDelete = (id) => {
-        firebase
+      const handleDelete = async (id) => {
+        try {
+          await firebase
             .firestore()
-            .collection("pesan")
+            .collection('pesan')
             .doc(id)
-            .delete()
-            .then(() => {
-                Alert.alert(
-                "Success",
-                "Data berhasil dihapus",
-                [{ text: "OK"}],
-                { cancelable: false }
-                );
-            })
-            .catch(error => {
-                console.error("Error removing document: ", error);
-                Alert.alert(
-                "Error",
-                "Data gagal dihapus",
-                [{ text: "OK" }],
-                { cancelable: false }
-                );
-        });
+            .update({
+              deleted: true
+            });
+          alert('Data berhasil dihapus');
+        } catch (error) {
+          alert(`Error updating document: ${error}`);
+        }
       };
 
       return(
@@ -81,7 +71,7 @@ function DetailPesan ({navigation, route}){
               navigation.goBack();
             }}
           />
-          <MaterialIcons name="more-vert" size={28} color={COLORS.white} />
+          
           </View>
       {data.map((data) => (
           <View style={styles.item} key={data.id}>

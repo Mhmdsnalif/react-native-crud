@@ -10,6 +10,8 @@ Login = ({navigation}) =>{
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [show, setShow] = React.useState(false);
+    //const [isLoading, setIsLoading] = useState(true);
+
 
     const handleLogin = () =>{
 

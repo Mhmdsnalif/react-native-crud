@@ -37,7 +37,7 @@ function Details({ navigation, route }) {
               navigation.goBack();
             }}
           />
-          <MaterialIcons name="more-vert" size={28} color={COLORS.white} />
+          
         </View>
         <View style={style.imageDetails}>
           <Text
@@ -57,11 +57,12 @@ function Details({ navigation, route }) {
 
       <View style={style.detailsContainer}>
         <TouchableOpacity activeOpacity={0.8}
-          onPress={() => navigation.navigate('Peta')}
+          onPress={() => navigation.navigate('MapScreen')}
         >
         <View style={style.iconContainer}>
           <FontAwesome5 name="map-marker-alt" size={28} color={COLORS.red} />
         </View>
+        
         </TouchableOpacity>
         <View style={{ flexDirection: "row", marginTop: 10 }}>
           <MaterialIcons name="location-on" size={28} color={COLORS.primary} />
@@ -74,7 +75,7 @@ function Details({ navigation, route }) {
         <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
           About the trip
         </Text>
-        <Text style={{ marginTop: 20, lineHeight: 22 }}>{place.details}</Text>
+        <Text style={{ marginTop: 20, lineHeight: 22, fontSize: 17 }}>{place.details}</Text>
       </View>
       <View style={style.footer}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
