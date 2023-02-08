@@ -16,6 +16,7 @@ import BottomTab from './components/bottomTab'
 import DetailPesan from './components/detailPesan';
 import MapScreen from './components/detailMaps';
 import Profile from './components/profile';
+import About from './components/about';
 //import { Ionicons } from '@expo/vector-icons';
 
 
@@ -55,7 +56,7 @@ function MyStack() {
      />
       <Stack.Screen 
        name="DetailPesan" 
-       component={DetailPesan} 
+       component={DetailPesan}
      />
       <Stack.Screen 
        name="MapScreen" 
@@ -64,6 +65,10 @@ function MyStack() {
      <Stack.Screen 
        name="Profile" 
        component={Profile} 
+     />
+     <Stack.Screen 
+       name="About" 
+       component={About} 
      />
     </Stack.Navigator>
     </NavigationContainer>

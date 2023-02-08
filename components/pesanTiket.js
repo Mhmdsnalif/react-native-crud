@@ -8,11 +8,13 @@ const Pesan = ({ isVisible, onClose }) => {
   const [nama, setNama] = useState('');
   const [jumlah, setJumlah] = useState(0);
 
+
   const handlePesan = () =>{
     const db = firebase.firestore();
     db.collection("pesan").add({
         nama,
-        jumlah
+        jumlah,
+        userId: firebase.auth().currentUser.uid
     })
     .then(function(docRef) {
         Alert.alert(
@@ -63,7 +65,7 @@ const Pesan = ({ isVisible, onClose }) => {
               style={{ borderBottomColor: 'black', borderBottomWidth: 1, padding: 5, width: '100%' }}
             />
           </View>
-          <View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
             <Button
               title="Pesan"
               color={COLORS.primary}
@@ -71,6 +73,13 @@ const Pesan = ({ isVisible, onClose }) => {
                 handlePesan
                 //onClose();
               }
+            />
+            <Button
+              title="cancel"
+              color={COLORS.primary}
+              onPress={() => {
+                onClose()
+              }}
             />
           </View>
         </View>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Dimensions,
   FlatList,
@@ -17,13 +17,23 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
-import places from "./places";
+import Places from "./places";
 const { width } = Dimensions.get("screen");
 
 const Dashboard = ({ navigation }) => {
-  
-  //fungsi search
+  const [places, setPlaces] = useState([]);
+  const [search, setSearch] = useState("");
 
+  React.useEffect(() => {
+    setPlaces(Places);
+  }, []);
+  //fungsi search
+  const filteredPlaces = places.filter(
+    place =>
+      
+      place.name.toLowerCase().indexOf(search.toLowerCase()) !== -1 ||
+      place.location.toLowerCase().indexOf(search.toLowerCase()) !== -1
+  );
   // catergories
   const categoryIcons = [
     <MaterialIcons name="flight" size={25} color={COLORS.primary} />,
@@ -143,6 +153,26 @@ const Dashboard = ({ navigation }) => {
     );
   };
 
+    const [filteredData, setFilteredData] = useState(Places);
+    const [searchTerm, setSearchTerm] = useState('');
+
+
+    const filterData = (filter) => {
+      setFilterBy(filter);
+      if (filter === 'all') {
+        setFilteredData(Places);
+      } else {
+        setFilteredData(Places.filter((item) => item.name === filter));
+      }
+    };
+
+    const handleSearch = (text) => {
+      setSearchTerm(text);
+      const filtered = Places.filter((item) => 
+      item.name.toLowerCase().includes(text.toLowerCase()));
+      setFilteredData(filtered);
+    };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar translucent backgroundColor={COLORS.primary} />
@@ -161,39 +191,52 @@ const Dashboard = ({ navigation }) => {
         >
           <View>
             <Text
-              style={{ color: COLORS.white, fontWeight: "bold", fontSize: 23 }}
+              style={{ color: COLORS.white, fontWeight: "bold", fontSize: 27 }}
             >
-              Explore the in the
+              Explore the 
             </Text>
             <Text
-              style={{ color: COLORS.white, fontWeight: "bold", fontSize: 23 }}
+              style={{ color: COLORS.white, fontWeight: "bold", fontSize: 27 }}
             >
               beautiful places
             </Text>
             <View style={style.inputContainer}>
               <MaterialIcons name="search" size={28} color={COLORS.dark} />
               <TextInput
+                onChangeText={handleSearch} value={searchTerm}
                 placeholder="Search place"
                 style={{ color: COLORS.grey, fontSize: 19, paddingLeft: 10 }}
               />
+              {/*}
+                {filteredPlaces.map(place => (
+            <View key={place.id} style={style.placeContainer}>
+              <Text>Nama: {place.name}</Text>
+              <Text>Lokasi: {place.location}</Text>
             </View>
+          ))}
+                {*/}
+            </View>
+          
           </View>
         </View>
         <ListCategory />
         <Text style={style.sectionTitle}>Places</Text>
         <View>
+          
           <FlatList
             contentContainerStyle={{ paddingLeft: 20, paddingBottom: 10 }}
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={places}
+            data={filteredData}
+            searchValue=''
             renderItem={({ item }) => <Card place={item} />}
+            keyExtractor={item => item.id.toString()}
           />
           <Text style={style.sectionTitle}>Recommended</Text>
           <FlatList
             snapToInterval={width - 20}
             contentContainerStyle={{ paddingLeft: 20, paddingBottom: 10 }}
-            
+            keyExtractor={item => item.id.toString()}
             showsHorizontalScrollIndicator={false}
             data={places}
             renderItem={({ item }) => <RecomCard place={item} />}

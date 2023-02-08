@@ -1,61 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import 'firebase/firestore';
-import { View, StyleSheet, Text, Alert } from "react-native";
+import { View, StyleSheet, Text, Alert, ActivityIndicator } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import firebase from '../database/firebase';
 import { VStack, NativeBaseProvider, Input, Stack, Icon, Pressable, Button } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 
-signUp = ({navigation}) =>{
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [show, setShow] = React.useState(false);
+export default class Signup extends Component {
+  
+  constructor() {
+    super();
+    this.state = { 
+      displayName: '',
+      email: '', 
+      password: '',
+      show: false,
+      isLoading: false
+    }
+  }
+  updateInputVal = (val, prop) => {
+    const state = this.state;
+    state[prop] = val;
+    this.setState(state);
+  }
 
-    const handleRegister = () => {
-        if (email === '') {
-            Alert.alert('Error', 'Email kosong');
-          } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-            Alert.alert('Error', 'Masukan Email yang Valid');
-          } else {
-            firebase
-              .firestore()
-              .collection('register')
-              .where('email', '==', email)
-              .get()
-              .then((querySnapshot) => {
-                if (!querySnapshot.empty) {
-                  Alert.alert('Error', 'Email Sudah Terdaftar');
-                    setName('');
-                    setEmail('');
-                    setPassword('');
-                } else {
-                  firebase
-                    .firestore()
-                    .collection('register')
-                    .add({
-                      name,
-                      email,
-                      password,
-                    })
-                    .then(() => {
-                        setName('');
-                        setEmail('');
-                        setPassword('');
-                        navigation.navigate('Login');
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-    };
+  toggleShowPassword = () => {
+    this.setState({ show: !this.state.show });
+  };
 
+  registerUser = () => {
+    if(this.state.email === '' && this.state.password === '') {
+      Alert.alert('Enter details to signup!')
+    } else {
+      this.setState({
+        isLoading: true,
+      })
+      firebase
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then((res) => {
+        res.user.updateProfile({
+          displayName: this.state.displayName
+        })
+        console.log('User registered successfully!')
+        this.setState({
+          isLoading: false,
+          displayName: '',
+          email: '', 
+          password: ''
+        })
+        this.props.navigation.navigate('Login')
+      })
+      .catch(error => this.setState({ errorMessage: error.message }))      
+    }
+  }
+
+  render(){
+    if(this.state.isLoading){
+      return(
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E"/>
+        </View>
+      )
+    }
     return(
       <NativeBaseProvider>
             
@@ -87,7 +94,8 @@ signUp = ({navigation}) =>{
               paddingLeft = {5}
               placeholder="Name" 
               variant= "underlined"
-              onChangeText={setName}
+              value={this.state.displayName}
+              onChangeText={(val) => this.updateInputVal(val, 'displayName')}
               
                />
 
@@ -97,43 +105,43 @@ signUp = ({navigation}) =>{
               size={5} ml="2" color="#00C9B1" />}
               fontSize = {24}
               paddingLeft = {5}
-              placeholder="Name" 
+              placeholder="Email" 
               variant= "underlined"
-              onChangeText={setEmail} />
+              value={this.state.email}
+              onChangeText={(val) => this.updateInputVal(val, 'email')} />
 
               <Input w="100%" 
-              type={show ? "text" : "password"} 
+              type={this.state.show ? "text" : "password"} 
               InputLeftElement=
               {<Icon as={<MaterialIcons name="https" />} 
               size={5} ml="2" color="#00C9B1" />}
-              InputRightElement={<Pressable onPress={() => setShow(!show)}>
-                    <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
+              InputRightElement={<Pressable onPress={this.toggleShowPassword}>
+                    <Icon as={<MaterialIcons name={this.state.show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
                   </Pressable>} 
                   placeholder="Password" 
                   variant= "underlined"
                   fontSize = {24}
                   paddingLeft = {5} 
-                  onChangeText={setPassword}/>
+                  value={this.state.password}
+                  onChangeText={(val) => this.updateInputVal(val, 'password')}/>
               
               <Button
-                onPress={handleRegister}
+                onPress={() => this.registerUser()}
                 bgColor="#00C9B1"
                 shadow={3}
                 marginTop={100}
             >Register</Button>
             <Text style={styles.loginText}>
-                Sudah Memiliki Akun? <Text onPress={() => navigation.navigate('Login')} style={{color: '#3740FE'}}>Click here</Text>
+                Sudah Memiliki Akun? <Text onPress={() => this.props.navigation.navigate('Login')} style={{color: '#3740FE'}}>Click here</Text>
             </Text>
             </Stack>
-
-            
 
             </VStack>
 
           </NativeBaseProvider>
     )
+  }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -160,7 +168,15 @@ const styles = StyleSheet.create({
     marginTop: 25,
     textAlign: 'center',
     fontSize: 16,
+  },
+  preloader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   }
 })
-
-export default signUp;

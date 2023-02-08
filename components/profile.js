@@ -1,40 +1,51 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native'
+import { StyleSheet, Button, Text, View, Image, TouchableOpacity, SafeAreaView, StatusBar, TextInput } from 'react-native'
 import 'firebase/firestore';
 import firebase from '../database/firebase';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import COLORS from './color';
 import { AntDesign } from '@expo/vector-icons';
 
 
-export default Profile = () => {
-
-    const [data, setData] = useState([]);
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-
-    useEffect(() => {
-        const unsubscribe = firebase
-          .firestore()
-          .collection('register')
-          .where('name', '==', name )
-          .where('email', '==', email)
-          .get()
-          .then((querySnapshot) => {
-            const updatedDetails = [];
-            querySnapshot.forEach((doc) => {
-              updatedDetails.push({
-                id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                password: doc.data().password
-              });
-            });
-            setData(updatedDetails);
-          });
-        return () => unsubscribe();
-      }, []);
-
+export default class Profile extends Component{
   
+  constructor(){
+    super();
+    this.state = {
+      uid: '',
+      //displayName: '',
+      //email: '',
+      //password: ''
+      password: '',
+      newPassword: ''
+    };
+  }
+  signOut = () => {
+    firebase.auth().signOut().then(() => {
+      this.props.navigation.navigate('Login')
+    })
+    .catch(error => this.setState({ errorMessage: error.message }))
+  }  
+
+  updatePassword = () => {
+    const user = firebase.auth().currentUser;
+    const { newPassword } = this.state;
+
+    user.updatePassword(newPassword)
+      .then(() => {
+        console.log("Password updated!");
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
+  }
+
+
+  render(){
+    this.state = { 
+      displayName: firebase.auth().currentUser.displayName,
+      email: firebase.auth().currentUser.email,
+      uid: firebase.auth().currentUser.uid
+    }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
         <StatusBar translucent backgroundColor={COLORS.primary} />
@@ -45,7 +56,7 @@ export default Profile = () => {
             size={28}
             color={COLORS.white}
             onPress={() => {
-              navigation.goBack();
+              this.props.navigation.goBack();
             }}
           />
           </View>
@@ -64,18 +75,49 @@ export default Profile = () => {
             </View>
         </View>
         <View style={styles.cont}>
-      {data.map((data) => (
-          <View style={styles.item} key={data.id}>
+      
+          <View style={styles.item}>
             <View style={styles.teks}>
-                <Text style={{fontSize: 20}}>Nama: {data ? data.name : ''}</Text>
-                <Text style={{fontSize: 20}}>Email: {data ? data.email : ''}</Text>
+                <Text style={{fontSize: 20}}>Nama: {this.state.displayName}</Text>
+                
+                
             </View>
           </View>
-        ))}
+          <View style={styles.item}>
+              <Text style={{fontSize: 20}}>Email: {this.state.email}</Text>
+            </View>
+{/*}
+            <View style={styles.item}>
+              <Text style={{fontSize: 20}}>Update Password:</Text>
+              <TextInput
+                secureTextEntry={true}
+                placeholder="New password"
+                onChangeText={newPassword => this.setState({ newPassword })}
+                value={this.state.newPassword}
+              />
+              <Button
+              title='Konfirmasi'
+                onPress={() => this.updatePassword()}
+                bgColor="#00C9B1"
+                />
+                </View>
+        {*/}
+    
+            <View style={styles.tombol}><Button
+                onPress={() => this.signOut()}
+                bgColor="#00C9B1"
+                shadow={3}
+                width = {300}
+                title= "Keluar"
+                style={{width: "80%", height: 100, fontSize: 20}}
+            >Keluar</Button>
+            </View>
+            
         </View>
     
         </SafeAreaView>
-  )
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -122,7 +164,15 @@ const styles = StyleSheet.create({
         marginTop: 70,
       },
       cont: {
+        flex: 1,
+        flexDirection: 'column',
         marginTop: 140
+      },
+      tombol: {
+        marginTop: 100,
+        paddingLeft: 20,
+        paddingRight: 20,
+        
       }
 })
 

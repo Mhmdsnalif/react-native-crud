@@ -49,7 +49,7 @@ const places =  [
   },
   {
     id: 5,
-    name: "Air Terjun Sedudo",
+    name: "zAir Terjun Sedudo",
     location: "Nganjuk, Jawa Timur",
     image: require("./assets/location5.jpg"),
     details:
@@ -75,9 +75,5 @@ const places =  [
     harga: "Rp. 20.000"
   },
 ];
-
-const Item = ({name}) => {
-  
-}
 
 export default places;

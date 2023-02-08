@@ -39,10 +39,6 @@ allprojects {
         resolutionStrategy {
             force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
         }
-        maven {
-            url "https://maven.google.com"
-        }
-
     }
 
     repositories {
